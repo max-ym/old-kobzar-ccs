@@ -21,6 +21,12 @@ pub trait Object {
 pub trait Service {
 }
 
+/// Channel is a conection of the requester-object that requests the
+/// service and the provider object. Data transfer is performed by
+/// implementation of this trait.
+pub trait Channel {
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
