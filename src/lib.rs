@@ -3,19 +3,19 @@
 pub trait Object {
 
     /// Type that is uniquely identifying objects in the system.
-    type ObjectId;
+    type Id;
 
     /// Get object unique identifier.
-    fn id(&self) -> Self::ObjectId;
+    fn id(&self) -> Self::Id;
 }
 
 pub trait Service  {
 
     /// Type that is uniquely identifying services in the system.
-    type ServiceId;
+    type Id;
 
     /// Get serivce identifier.
-    fn id(&self) -> Self::ServiceId;
+    fn id(&self) -> Self::Id;
 }
 
 #[cfg(test)]
