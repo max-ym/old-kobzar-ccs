@@ -11,6 +11,16 @@ pub trait Master {
 pub trait Object {
 }
 
+/// Service is requested by the Object. Service is used to update some
+/// data, create or delete it, make some calculations or make any other
+/// change to the system. It can be provided by a single program on the
+/// system or by a group of different programs. CCS decides which
+/// program may serve the request or may decline contributing to
+/// request transferer. This trait identifies single service that can
+/// be provided by any program in the system.
+pub trait Service {
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
