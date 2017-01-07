@@ -39,7 +39,7 @@ pub trait Service {
     fn id(&self) -> Self::Id;
 }
 
-/// Channel is a conection of the requester-object that requests the
+/// Channel is a connection of the requester-object that requests the
 /// service and the provider object. Data transfer is performed by
 /// implementation of this trait.
 pub trait Channel<O, S>
