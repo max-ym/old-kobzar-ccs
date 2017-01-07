@@ -42,7 +42,14 @@ pub trait Service {
 /// Channel is a conection of the requester-object that requests the
 /// service and the provider object. Data transfer is performed by
 /// implementation of this trait.
-pub trait Channel {
+pub trait Channel<O, S>
+        where O: Object, S: Service {
+
+    /// Get object which requested the service.
+    fn requester(&self) -> &O;
+
+    /// Get service that was requested.
+    fn service(&self) -> &S;
 }
 
 #[cfg(test)]
