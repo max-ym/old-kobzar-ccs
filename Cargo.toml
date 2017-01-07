@@ -1,0 +1,6 @@
+[package]
+name = "kobzar-ccs"
+version = "0.1.0"
+authors = ["Maxym Naumchyk <max.naumch@gmail.com>"]
+
+[dependencies]
