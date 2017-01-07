@@ -17,7 +17,7 @@ pub trait Object {
 
     /// Get object identifier. Each object in one CCS network has
     /// unique identifier.
-    fn id(&self) -> Id;
+    fn id(&self) -> Self::Id;
 }
 
 /// Service is requested by the Object. Service is used to update some
@@ -36,7 +36,7 @@ pub trait Service {
 
     /// Get service identifier. Each service in one CCS network has
     /// unique identifier.
-    fn id(&self) -> Id;
+    fn id(&self) -> Self::Id;
 }
 
 /// Channel is a conection of the requester-object that requests the
