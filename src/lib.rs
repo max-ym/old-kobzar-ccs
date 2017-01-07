@@ -9,6 +9,15 @@ pub trait Master {
 /// the RAM. The CCS object may request services of other objects which
 /// either already are loaded or can be loaded to reply on the request.
 pub trait Object {
+
+    /// Use to separate different objects in the system so that
+    /// it was possible to definitely recognize one object
+    /// among all others.
+    type Id;
+
+    /// Get object identifier. Each object in one CCS network has
+    /// unique identifier.
+    fn id(&self) -> Id;
 }
 
 /// Service is requested by the Object. Service is used to update some
@@ -19,6 +28,15 @@ pub trait Object {
 /// request transferer. This trait identifies single service that can
 /// be provided by any program in the system.
 pub trait Service {
+
+    /// Use to separate different services in the network so that
+    /// it was possible to definitely recognize one service
+    /// among all others.
+    type Id;
+
+    /// Get service identifier. Each service in one CCS network has
+    /// unique identifier.
+    fn id(&self) -> Id;
 }
 
 /// Channel is a conection of the requester-object that requests the
