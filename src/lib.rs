@@ -14,7 +14,7 @@ pub trait Service  {
     /// Type that is uniquely identifying services in the system.
     type Id;
 
-    /// Get serivce identifier.
+    /// Get service identifier.
     fn id(&self) -> Self::Id;
 }
 
