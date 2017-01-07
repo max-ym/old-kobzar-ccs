@@ -23,10 +23,10 @@ pub trait Channel<ServiceType, ObjectType> where
         ObjectType  : Object {
 
     /// Get requester-object reference.
-    fn requester(&self) -> &ObjectType::Id;
+    fn requester(&self) -> &ObjectType;
 
     /// Get requested service reference.
-    fn service(&self) -> &ServiceType::Id;
+    fn service(&self) -> &ServiceType;
 }
 
 #[cfg(test)]
