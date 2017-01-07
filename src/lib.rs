@@ -29,6 +29,10 @@ pub trait Channel<ServiceType, ObjectType> where
     fn service(&self) -> &ServiceType;
 }
 
+pub trait Page {
+    // Empty currently.
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
