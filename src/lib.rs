@@ -18,6 +18,17 @@ pub trait Service  {
     fn id(&self) -> Self::Id;
 }
 
+pub trait Channel<ServiceType, ObjectType> where
+        ServiceType : Service,
+        ObjectType  : Object {
+
+    /// Get identifier of a requester-object.
+    fn requester_id(&self) -> ObjectType::Id;
+
+    /// Get identifier of a requested service.
+    fn service_id(&self) -> ServiceType::Id;
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
