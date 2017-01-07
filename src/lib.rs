@@ -9,6 +9,15 @@ pub trait Object {
     fn id(&self) -> Self::ObjectId;
 }
 
+pub trait Service  {
+
+    /// Type that is uniquely identifying services in the system.
+    type ServiceId;
+
+    /// Get serivce identifier.
+    fn id(&self) -> Self::ServiceId;
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
