@@ -54,9 +54,10 @@ pub trait Service: Sized {
 
     /// Attempt to register new service that current object is ready to
     /// provide.
-    fn register<O, SC>(reg_form: RegistrationForm<O, Self, SC>)
-        -> Result<Self, RegistrationErr>
+    fn register<O, OS, SC>(reg_form: RegistrationForm<O, Self, SC>)
+        -> Result<OS, RegistrationErr>
         where   O   : Object<Self>,
+                OS  : OwnedService<Id = Self::Id>,
                 SC  : ServerChannel<O, Self>;
 
     /// Try to register service that the object that called this
