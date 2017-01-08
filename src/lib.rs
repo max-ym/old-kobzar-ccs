@@ -25,7 +25,7 @@ pub trait Object<S: Service>: Sized {
     /// The object that called this function quits.
     /// All allocated resources are freed. All services registered
     /// by the object are removed.
-    fn quit() -> !;
+    fn decease() -> !;
 }
 
 /// Service is requested by the Object. Service is used to update some
