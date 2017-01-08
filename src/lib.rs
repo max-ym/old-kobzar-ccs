@@ -47,7 +47,7 @@ pub trait Service: Sized {
     fn id(&self) -> Self::Id;
 
     /// Look for service with given identifier in the CCS network.
-    fn get_by_id(id: Id) -> Option<Self>;
+    fn get_by_id(id: Self::Id) -> Option<Self>;
 
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
