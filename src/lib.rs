@@ -2,7 +2,7 @@
 /// program that is currently running on the system, or residing in
 /// the RAM. The CCS object may request services of other objects which
 /// either already are loaded or can be loaded to reply on the request.
-pub trait Object<S: Service<Self>>: Sized {
+pub trait Object<S: Service>: Sized {
 
     /// Use to separate different objects in the system so that
     /// it was possible to definitely recognize one object
@@ -30,7 +30,7 @@ pub trait Object<S: Service<Self>>: Sized {
 /// program may serve the request or may decline contributing to
 /// request transferer. This trait identifies single service that can
 /// be provided by any program in the system.
-pub trait Service<O: Object<Self>>: Sized {
+pub trait Service: Sized {
 
     /// Use to separate different services in the network so that
     /// it was possible to definitely recognize one service
@@ -43,13 +43,16 @@ pub trait Service<O: Object<Self>>: Sized {
 
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
-    fn request<RC: RequesterChannel<O, Self>>(&self) -> Option<RC>;
+    fn request<O, RC>(&self) -> Option<RC>
+        where O     : Object<Self>,
+              RC    : RequesterChannel<O, Self>;
 
     /// Attempt to register new service that current object is ready to
-    /// provide. The Fn argument is a function that is runned when
-    /// servie is requested by an object in the system.
-    fn register<SC: ServerChannel<O, Self>>(entry: Fn(SC))
-            -> Result<Self, RegistrationErr>;
+    /// provide.
+    fn register<O, SC>(reg_form: RegistrationForm<O, Self, SC>)
+        -> Result<Self, RegistrationErr>
+        where   O   : Object<Self>,
+                SC  : ServerChannel<O, Self>;
 
     /// Try to register service that the object that called this
     /// function is ready to provide. The difference from 'register'
@@ -66,15 +69,58 @@ pub trait Service<O: Object<Self>>: Sized {
     /// starts very early at system initialization, it uniquely registers
     /// its services so no other objects in the system later after
     /// booting couldn't succeed in service interception.
-    fn register_unique<SC: ServerChannel<O, Self>>(entry: Fn(SC))
-            -> Result<Self, RegistrationErr>;
+    fn register_unique<O, SC>(reg_form: RegistrationForm<O, Self, SC>)
+        -> Result<Self, RegistrationErr>
+        where   O   : Object<Self>,
+                SC  : ServerChannel<O, Self>;
+}
+
+pub struct RegistrationForm<O, S, SC>
+        where O     : Object<S>,
+              S     : Service,
+              SC    : ServerChannel<O, S>
+{
+    _a      : std::marker::PhantomData<O>,
+
+    /// Entry point. When service is requested, execution starts
+    /// from given function.
+    pub entry   : fn(SC),
+
+    /// Identifier of the service.
+    pub id      : S::Id,
+}
+
+impl<O, S, SC> RegistrationForm<O, S, SC>
+        where O     : Object<S>,
+              S     : Service,
+              SC    : ServerChannel<O, S>
+{
+
+    /// Create new registration form.
+    ///
+    /// 'entry' argument is the entry function that will be called
+    /// when service will be requested.
+    ///
+    /// 'id' argument is used to identify this service. Other
+    /// objects will request this service from network by given
+    /// identifier.
+    pub fn new (
+        entry   : fn(SC),
+        id      : S::Id
+    ) -> Self {
+        RegistrationForm {
+            _a      : std::marker::PhantomData,
+            entry   : entry,
+            id      : id
+        }
+    }
 }
 
 /// Channel is a connection of the requester-object that requests the
 /// service and the provider object. Data transfer is performed by
 /// implementation of this trait.
 pub trait Channel<O, S>: Sized
-        where O: Object<S>, S: Service<O> {
+        where O: Object<S>, S: Service {
 
     /// Get object which requested the service.
     fn requester(&self) -> &O;
@@ -84,13 +130,13 @@ pub trait Channel<O, S>: Sized
 }
 
 /// A channel handle of a server.
-pub trait ServerChannel<O, S>: Channel<O, S>
-        where O: Object<S>, S: Service<O> {
+pub trait ServerChannel<O, S>: Sized + Channel<O, S>
+        where O: Object<S>, S: Service {
 }
 
 /// A channel handle of a requester.
-pub trait RequesterChannel<O, S>: Channel<O, S>
-        where O: Object<S>, S: Service<O> {
+pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
+        where O: Object<S>, S: Service {
 }
 
 /// Error that can appear when new service is being registered.
