@@ -44,6 +44,10 @@ pub trait Service {
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
     fn request(&self) -> Option<Channel>;
+
+    /// Attempt to register new service that current object is ready to
+    /// provide.
+    fn register(entry: Fn(ServerChannel)) -> Result<Self, RegisterErr>;
 }
 
 /// Channel is a connection of the requester-object that requests the
@@ -57,6 +61,10 @@ pub trait Channel<O, S>
 
     /// Get service that was requested.
     fn service(&self) -> &S;
+}
+
+/// A channel handle of a server.
+pub trait ServerChannel {
 }
 
 #[cfg(test)]
