@@ -96,6 +96,15 @@ pub trait RequesterChannel<O, S>: Channel<O, S>
 /// Error that can appear when new service is being registered.
 pub enum RegistrationErr {
 
+    /// The service couldn't be registered because the same
+    /// service is uniquely provided by some object.
+    UniquelyRegistered,
+
+    /// When attempting to uniquely register some service and
+    /// when the same service is already registered in the system,
+    /// CCS network can't register this service uniquely. Not until
+    /// all the same services are closed.
+    AlreadyRegistered
 }
 
 #[cfg(test)]
