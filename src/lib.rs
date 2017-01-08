@@ -24,8 +24,15 @@ pub trait Object<S: Service>: Sized {
 
     /// The object that called this function quits.
     /// All allocated resources are freed. All services registered
-    /// by the object are removed.
+    /// by the object are removed. All sub-objects are killed.
     fn decease() -> !;
+}
+
+pub trait OwnedObject<S>: Object<S> where S: Service {
+
+    /// Kill given owned object. All resources local for this object
+    /// are released. All services provided by this object are discarded.
+    fn kill(&self);
 }
 
 /// Service is requested by the Object. Service is used to update some
