@@ -46,7 +46,8 @@ pub trait Service {
     fn request(&self) -> Option<Channel>;
 
     /// Attempt to register new service that current object is ready to
-    /// provide.
+    /// provide. The Fn argument is a function that is runned when
+    /// servie is requested by an object in the system.
     fn register(entry: Fn(ServerChannel)) -> Result<Self, RegisterErr>;
 }
 
@@ -64,7 +65,8 @@ pub trait Channel<O, S>
 }
 
 /// A channel handle of a server.
-pub trait ServerChannel {
+pub trait ServerChannel: Channel<O, S>
+        where O: Object, S: Service {
 }
 
 #[cfg(test)]
