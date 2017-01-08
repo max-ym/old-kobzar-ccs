@@ -139,6 +139,7 @@ pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
         where O: Object<S>, S: Service {
 }
 
+#[derive(Debug)]
 /// Error that can appear when new service is being registered.
 pub enum RegistrationErr {
 
