@@ -75,6 +75,7 @@ pub trait RequesterChannel<O, S>: Channel<O, S>
         where O: Object<S>, S: Service<O> {
 }
 
+/// Error that can appear when new service is being registered.
 pub enum RegistrationErr {
 }
 
