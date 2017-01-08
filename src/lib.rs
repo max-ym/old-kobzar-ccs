@@ -50,6 +50,24 @@ pub trait Service<O: Object<Self>>: Sized {
     /// servie is requested by an object in the system.
     fn register<SC: ServerChannel<O, Self>>(entry: Fn(SC))
             -> Result<Self, RegistrationErr>;
+
+    /// Try to register service that the object that called this
+    /// function is ready to provide. The difference from 'register'
+    /// function is that this one tries to make the service unique
+    /// in the CCS network. That is, any other object can't provide
+    /// the same service at the same time. If this service is
+    /// already registered, system will decline in registering this
+    /// service.
+    ///
+    /// This is useful for security reasons. For example, we
+    /// have got some operating system and a Memory Server running on it.
+    /// It provides some service to allocate memory. Only
+    /// Memory Server is allowed to allocate memory and since it
+    /// starts very early at system initialization, it uniquely registers
+    /// its services so no other objects in the system later after
+    /// booting couldn't succeed in service interception.
+    fn register_unique<SC: ServerChannel<O, Self>>(entry: Fn(SC))
+            -> Result<Self, RegistrationErr>;
 }
 
 /// Channel is a connection of the requester-object that requests the
@@ -77,6 +95,7 @@ pub trait RequesterChannel<O, S>: Channel<O, S>
 
 /// Error that can appear when new service is being registered.
 pub enum RegistrationErr {
+
 }
 
 #[cfg(test)]
