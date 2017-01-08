@@ -74,9 +74,11 @@ pub trait Service: Sized {
     /// starts very early at system initialization, it uniquely registers
     /// its services so no other objects in the system later after
     /// booting couldn't succeed in service interception.
-    fn register_unique<O, SC>(reg_form: RegistrationForm<O, Self, SC>)
-        -> Result<Self, RegistrationErr>
+    fn register_unique<O, OS, SC>
+        (reg_form: RegistrationForm<O, Self, SC>)
+        -> Result<OS, RegistrationErr>
         where   O   : Object<Self>,
+                OS  : OwnedService<Id = Self::Id>,
                 SC  : ServerChannel<O, Self>;
 }
 
