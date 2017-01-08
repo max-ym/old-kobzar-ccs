@@ -80,6 +80,19 @@ pub trait Service: Sized {
                 SC  : ServerChannel<O, Self>;
 }
 
+/// OwnedService is received only by the object that registered
+/// this service. Using this handle service provider-object can
+/// discontinue service or do other owner-related stuff.
+pub trait OwnedService: Sized + Service {
+
+    /// Notify the system that object doesn't provide selected service
+    /// no more. This function returns RegistrationForm so
+    /// that discontinued service could be registered again.
+    fn discontinue<O, SC>(self) -> RegistrationForm<O, Self, SC>
+        where   O   : Object<Self>,
+                SC  : ServerChannel<O, Self>;
+}
+
 pub struct RegistrationForm<O, S, SC>
         where O     : Object<S>,
               S     : Service,
