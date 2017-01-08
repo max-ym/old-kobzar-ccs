@@ -2,10 +2,6 @@
 /// the system. Each CCS model implementation has it's own Master. Thus,
 /// each OS architecture implement their specific Master.
 pub trait Master<S: Service> {
-
-    /// Request a service. If any object in CCS network can provide
-    /// such service, then channel is created.
-    fn request(service: &S) -> Option<Channel>;
 }
 
 /// Object is sort of process in Kobzar. It is an instanse of some
@@ -46,6 +42,10 @@ pub trait Service {
     /// Get service identifier. Each service in one CCS network has
     /// unique identifier.
     fn id(&self) -> Self::Id;
+
+    /// Request a service. If any object in CCS network can provide
+    /// such service, then channel is created.
+    fn request(&self) -> Option<Channel>;
 }
 
 /// Channel is a connection of the requester-object that requests the
