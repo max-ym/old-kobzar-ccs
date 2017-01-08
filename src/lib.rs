@@ -70,6 +70,11 @@ pub trait ServerChannel<O, S>: Channel<O, S>
         where O: Object<S>, S: Service<O> {
 }
 
+/// A channel handle of a requester.
+pub trait RequesterChannel<O, S>: Channel<O, S>
+        where O: Object<S>, S: Service<O> {
+}
+
 pub enum RegistrationErr {
 }
 
