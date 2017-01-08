@@ -23,6 +23,10 @@ pub trait Object<S: Service> {
     /// If object has no service with given identifier, None will
     /// be returned.
     fn service_by_id(id: &S::Id) -> Option<&S>;
+
+    /// Get object of current running application. When this application
+    /// calls this function, it gets a self object.
+    fn myself() -> Object;
 }
 
 /// Service is requested by the Object. Service is used to update some
