@@ -43,7 +43,7 @@ pub trait Service<O: Object<Self>>: Sized {
 
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
-    fn request<C: Channel<O, Self>>(&self) -> Option<C>;
+    fn request<RC: RequesterChannel<O, Self>>(&self) -> Option<RC>;
 
     /// Attempt to register new service that current object is ready to
     /// provide. The Fn argument is a function that is runned when
