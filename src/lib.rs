@@ -32,7 +32,15 @@ pub trait OwnedObject<S>: Object<S> where S: Service {
 
     /// Kill given owned object. All resources local for this object
     /// are released. All services provided by this object are discarded.
-    fn kill(&self);
+    /// Fail when object is not alive.
+    fn kill(&self) -> Result<(), ObjectKillErr>;
+}
+
+/// Errors that appear on failed attempt to kill an object.
+pub enum ObjectKillErr {
+
+    /// Object is not alive and cannot be killed.
+    NotAlive,
 }
 
 /// Service is requested by the Object. Service is used to update some
