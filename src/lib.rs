@@ -46,8 +46,16 @@ pub trait Service: Sized {
     /// unique identifier.
     fn id(&self) -> Self::Id;
 
-    /// Look for service with given identifier in the CCS network.
-    fn get_by_id(id: Self::Id) -> Option<Self>;
+    /// Make a service pointer with given identifier.
+    /// This function always succeedes even if no object in the system
+    /// provides service with given identifier.
+    /// When this service will be requested, if no object is providing
+    /// the service, channel would not be established.
+    /// The objects that provide this service can be created or deceased
+    /// after this pointer is created and so even if channel was
+    /// established once, it does not guaranteed that channels will
+    /// always succeed to be established later in time.
+    fn get_by_id(id: Self::Id) -> Self;
 
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
