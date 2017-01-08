@@ -8,7 +8,7 @@ pub trait Master {
 /// program that is currently running on the system, or residing in
 /// the RAM. The CCS object may request services of other objects which
 /// either already are loaded or can be loaded to reply on the request.
-pub trait Object {
+pub trait Object<S: Service> {
 
     /// Use to separate different objects in the system so that
     /// it was possible to definitely recognize one object
@@ -18,6 +18,11 @@ pub trait Object {
     /// Get object identifier. Each object in one CCS network has
     /// unique identifier.
     fn id(&self) -> Self::Id;
+
+    /// Get information about the service by given identifier.
+    /// If object has no service with given identifier, None will
+    /// be returned.
+    fn service_by_id(id: &S::Id) -> Option<&S>;
 }
 
 /// Service is requested by the Object. Service is used to update some
