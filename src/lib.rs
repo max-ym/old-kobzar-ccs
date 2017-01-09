@@ -125,7 +125,7 @@ pub trait Service: Sized {
     /// after this pointer is created and so even if channel was
     /// established once, it does not guaranteed that channels will
     /// always succeed to be established later in time.
-    fn get_by_id(id: Self::Id) -> Self;
+    fn by_id(id: Self::Id) -> Self;
 }
 
 /// OwnedService is received only by the object that registered
