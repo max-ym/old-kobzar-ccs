@@ -49,6 +49,11 @@ pub enum ObjectKillErr {
     NotAlive,
 }
 
+/// A CCS network.
+pub trait Network<S: Service> {
+
+}
+
 /// Service is requested by the Object. Service is used to update some
 /// data, create or delete it, make some calculations or make any other
 /// change to the system. It can be provided by a single program on the
