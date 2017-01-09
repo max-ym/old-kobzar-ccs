@@ -207,6 +207,18 @@ pub trait Channel<O, S>: Sized
 /// A channel handle of a server.
 pub trait ServerChannel<O, S>: Sized + Channel<O, S>
         where O: Object<S>, S: Service {
+
+    /// Disconect from requester and deny providing the service this
+    /// time.
+    fn deny(self);
+
+    /// Peek read-only data that was sent by the requester.
+    fn data(&self) -> &Data;
+
+    /// Accept providing service and receive read-write rights on the
+    /// data chunk from the requester. Requester will not access
+    /// the data chunk no more.
+    fn accept(self); // TODO
 }
 
 /// A channel handle of a requester.
