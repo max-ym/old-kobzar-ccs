@@ -20,7 +20,7 @@ pub trait Object<S: Service>: Sized {
 
     /// Get object of current running application. When this application
     /// calls this function, it gets a self object.
-    fn myself() -> OwnedObject<S, Id = Self::Id>;
+    fn myself<OO: OwnedObject<S, Id = Self::Id>>() -> OO;
 
     /// The object that called this function quits.
     /// All allocated resources are freed. All services registered
@@ -28,7 +28,7 @@ pub trait Object<S: Service>: Sized {
     fn decease() -> !;
 
     /// Get a CCS Network reference for this object.
-    fn network(&self) -> &Network<S>;
+    fn network<N: Network<S>>(&self) -> &N;
 }
 
 pub trait OwnedObject<S>: Object<S> where S: Service {
@@ -48,7 +48,7 @@ pub trait OwnedObject<S>: Object<S> where S: Service {
     /// That is, all sub-objects and their services are created in
     /// master-object's internal network. It is not visible from the
     /// outside of that object in its external network.
-    fn internal_network(&self) -> &Network<S>;
+    fn internal_network<N: Network<S>>(&self) -> &N;
 }
 
 /// Errors that appear on failed attempt to kill an object.
@@ -59,7 +59,7 @@ pub enum ObjectKillErr {
 }
 
 /// A CCS network.
-pub trait Network<S: Service> {
+pub trait Network<S: Service>: Sized {
 
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
