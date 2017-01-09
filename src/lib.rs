@@ -49,6 +49,9 @@ pub trait OwnedObject<S>: Object<S> where S: Service {
     /// master-object's internal network. It is not visible from the
     /// outside of that object in its external network.
     fn internal_network<ON: OpenNetwork<S>>(&self) -> &ON;
+
+    /// Get an external CCS Network reference for this object.
+    fn network<ON: OpenNetwork<S>>(&self) -> &ON;
 }
 
 /// Errors that appear on failed attempt to kill an object.
