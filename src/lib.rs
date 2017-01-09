@@ -20,7 +20,7 @@ pub trait Object<S: Service>: Sized {
 
     /// Get object of current running application. When this application
     /// calls this function, it gets a self object.
-    fn myself() -> Self;
+    fn myself() -> OwnedObject<S, Id = Self::Id>;
 
     /// The object that called this function quits.
     /// All allocated resources are freed. All services registered
