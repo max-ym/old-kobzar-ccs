@@ -43,6 +43,12 @@ pub trait OwnedObject<S>: Object<S> where S: Service {
     /// Check if given object is still alive. It is alive if
     /// main thread is running or at least one service is provided.
     fn is_alive(&self) -> bool;
+
+    /// Get a CCS Network reference that exists inside the object.
+    /// That is, all sub-objects and their services are created in
+    /// master-object's internal network. It is not visible from the
+    /// outside of that object in its external network.
+    fn internal_network(&self) -> &Network<S>;
 }
 
 /// Errors that appear on failed attempt to kill an object.
