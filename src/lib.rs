@@ -240,6 +240,29 @@ pub trait Data {
 /// some aspects of service providing process.
 pub trait RequestStatus<O, S, RC>: Sized + Channel<O, S>
         where O: Object<S>, S: Service, RC: RequesterChannel<O, S> {
+
+    /// Wait for the provider decision (accept or deny). This
+    /// thread will halt.
+    fn wait_decision(&self) -> Decision;
+
+    /// Same as 'wait_decision' except the timer will countdown
+    /// and quit waiting on timeout.
+    fn wait_decision_for(&self, time: Time) -> Option<Decision>;
+}
+
+/// The time. Used in timers.
+pub trait Time {
+    // TODO
+}
+
+/// The decision of the service provider.
+pub enum Decision {
+
+    /// Service provider accepted to provide the requested service.
+    Accept,
+
+    /// Service provider denied to provide the requested service.
+    Deny
 }
 
 /// Error that appears after failed attempt to send the data via channel.
