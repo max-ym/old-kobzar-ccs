@@ -70,9 +70,9 @@ pub trait Network<S: Service>: Sized {
 /// can register new services or request them in its open networks.
 pub trait OpenNetwork<S>: Network<S> where S: Service {
 
-    /// Request a service. If any object in CCS network can provide
-    /// such service, then channel is created.
-    fn request<O, RC>(&self, service: S) -> Result<RC, S>
+    /// Connect to a service provider. If any object in CCS network can
+    /// provide such service, then channel is created.
+    fn connect<O, RC>(&self, service: S) -> Result<RC, S>
         where O     : Object<S>,
               RC    : RequesterChannel<O, S>;
 
