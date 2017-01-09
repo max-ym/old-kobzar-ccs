@@ -52,6 +52,41 @@ pub enum ObjectKillErr {
 /// A CCS network.
 pub trait Network<S: Service> {
 
+    /// Request a service. If any object in CCS network can provide
+    /// such service, then channel is created.
+    fn request<O, RC>(&self) -> Option<RC>
+        where O     : Object<S>,
+              RC    : RequesterChannel<O, S>;
+
+    /// Attempt to register new service that current object is ready to
+    /// provide.
+    fn register<O, OS, SC>(reg_form: RegistrationForm<O, S, SC>)
+        -> Result<OS, RegistrationErr>
+        where   O   : Object<S>,
+                OS  : OwnedService<Id = S::Id>,
+                SC  : ServerChannel<O, S>;
+
+    /// Try to register service that the object that called this
+    /// function is ready to provide. The difference from 'register'
+    /// function is that this one tries to make the service unique
+    /// in the CCS network. That is, any other object can't provide
+    /// the same service at the same time. If this service is
+    /// already registered, system will decline in registering this
+    /// service.
+    ///
+    /// This is useful for security reasons. For example, we
+    /// have got some operating system and a Memory Server running on it.
+    /// It provides some service to allocate memory. Only
+    /// Memory Server is allowed to allocate memory and since it
+    /// starts very early at system initialization, it uniquely registers
+    /// its services so no other objects in the system later after
+    /// booting couldn't succeed in service interception.
+    fn register_unique<O, OS, SC>
+        (reg_form: RegistrationForm<O, S, SC>)
+        -> Result<OS, RegistrationErr>
+        where   O   : Object<S>,
+                OS  : OwnedService<Id = S::Id>,
+                SC  : ServerChannel<O, S>;
 }
 
 /// Service is requested by the Object. Service is used to update some
@@ -82,42 +117,6 @@ pub trait Service: Sized {
     /// established once, it does not guaranteed that channels will
     /// always succeed to be established later in time.
     fn get_by_id(id: Self::Id) -> Self;
-
-    /// Request a service. If any object in CCS network can provide
-    /// such service, then channel is created.
-    fn request<O, RC>(&self) -> Option<RC>
-        where O     : Object<Self>,
-              RC    : RequesterChannel<O, Self>;
-
-    /// Attempt to register new service that current object is ready to
-    /// provide.
-    fn register<O, OS, SC>(reg_form: RegistrationForm<O, Self, SC>)
-        -> Result<OS, RegistrationErr>
-        where   O   : Object<Self>,
-                OS  : OwnedService<Id = Self::Id>,
-                SC  : ServerChannel<O, Self>;
-
-    /// Try to register service that the object that called this
-    /// function is ready to provide. The difference from 'register'
-    /// function is that this one tries to make the service unique
-    /// in the CCS network. That is, any other object can't provide
-    /// the same service at the same time. If this service is
-    /// already registered, system will decline in registering this
-    /// service.
-    ///
-    /// This is useful for security reasons. For example, we
-    /// have got some operating system and a Memory Server running on it.
-    /// It provides some service to allocate memory. Only
-    /// Memory Server is allowed to allocate memory and since it
-    /// starts very early at system initialization, it uniquely registers
-    /// its services so no other objects in the system later after
-    /// booting couldn't succeed in service interception.
-    fn register_unique<O, OS, SC>
-        (reg_form: RegistrationForm<O, Self, SC>)
-        -> Result<OS, RegistrationErr>
-        where   O   : Object<Self>,
-                OS  : OwnedService<Id = Self::Id>,
-                SC  : ServerChannel<O, Self>;
 }
 
 /// OwnedService is received only by the object that registered
