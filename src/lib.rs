@@ -72,7 +72,7 @@ pub trait OpenNetwork<S>: Network<S> where S: Service {
 
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
-    fn request<O, RC>(&self) -> Option<RC>
+    fn request<O, RC>(&self, service: S) -> Result<RC, S>
         where O     : Object<S>,
               RC    : RequesterChannel<O, S>;
 
