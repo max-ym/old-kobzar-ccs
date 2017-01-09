@@ -78,7 +78,7 @@ pub trait OpenNetwork<S>: Network<S> where S: Service {
 
     /// Attempt to register new service that current object is ready to
     /// provide.
-    fn register<O, OS, SC>(reg_form: RegistrationForm<O, S, SC>)
+    fn register<O, OS, SC>(&self, reg_form: RegistrationForm<O, S, SC>)
         -> Result<OS, RegistrationErr>
         where   O   : Object<S>,
                 OS  : OwnedService<Id = S::Id>,
@@ -100,7 +100,7 @@ pub trait OpenNetwork<S>: Network<S> where S: Service {
     /// its services so no other objects in the system later after
     /// booting couldn't succeed in service interception.
     fn register_unique<O, OS, SC>
-        (reg_form: RegistrationForm<O, S, SC>)
+        (&self, reg_form: RegistrationForm<O, S, SC>)
         -> Result<OS, RegistrationErr>
         where   O   : Object<S>,
                 OS  : OwnedService<Id = S::Id>,
