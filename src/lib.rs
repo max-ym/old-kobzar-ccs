@@ -137,7 +137,7 @@ pub struct RegistrationForm<O, S, SC>
 
     /// Entry point. When service is requested, execution starts
     /// from given function.
-    pub entry   : fn(SC),
+    pub entry   : fn(SC) -> !,
 
     /// Identifier of the service.
     pub id      : S::Id,
@@ -158,7 +158,7 @@ impl<O, S, SC> RegistrationForm<O, S, SC>
     /// objects will request this service from network by given
     /// identifier.
     pub fn new (
-        entry   : fn(SC),
+        entry   : fn(SC) -> !,
         id      : S::Id
     ) -> Self {
         RegistrationForm {
