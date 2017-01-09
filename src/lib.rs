@@ -236,6 +236,8 @@ pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
 pub trait Data {
 }
 
+/// A channel that can access service providing status and control
+/// some aspects of service providing process.
 pub trait RequestStatus<O, S, RC>: Sized + Channel<O, S>
         where O: Object<S>, S: Service, RC: RequesterChannel<O, S> {
 }
