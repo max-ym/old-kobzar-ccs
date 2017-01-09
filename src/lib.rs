@@ -227,10 +227,17 @@ pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
 
     /// Cancel the request. Get back the service entry.
     fn cancel(self) -> Service;
+
+    /// Request a service via this channel.
+    fn request<RS: RequestStatus<O, S, Self>>(self, mut data: Data) -> RS;
 }
 
 /// Some data that is transfered via channels.
 pub trait Data {
+}
+
+pub trait RequestStatus<O, S, RC>: Sized + Channel<O, S>
+        where O: Object<S>, S: Service, RC: RequesterChannel<O, S> {
 }
 
 /// Error that appears after failed attempt to send the data via channel.
