@@ -48,7 +48,7 @@ pub trait OwnedObject<S>: Object<S> where S: Service {
     /// That is, all sub-objects and their services are created in
     /// master-object's internal network. It is not visible from the
     /// outside of that object in its external network.
-    fn internal_network<N: Network<S>>(&self) -> &N;
+    fn internal_network<ON: OpenNetwork<S>>(&self) -> &ON;
 }
 
 /// Errors that appear on failed attempt to kill an object.
@@ -60,6 +60,12 @@ pub enum ObjectKillErr {
 
 /// A CCS network.
 pub trait Network<S: Service>: Sized {
+
+}
+
+/// A CCS network that is open for current object. Current object
+/// can register new services or request them in its open networks.
+pub trait OpenNetwork<S>: Network<S> where S: Service {
 
     /// Request a service. If any object in CCS network can provide
     /// such service, then channel is created.
