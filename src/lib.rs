@@ -26,6 +26,9 @@ pub trait Object<S: Service>: Sized {
     /// All allocated resources are freed. All services registered
     /// by the object are removed. All sub-objects are killed.
     fn decease() -> !;
+
+    /// Get a CCS Network reference for this object.
+    fn network(&self) -> &Network<S>;
 }
 
 pub trait OwnedObject<S>: Object<S> where S: Service {
