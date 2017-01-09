@@ -226,7 +226,7 @@ pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
         where O: Object<S>, S: Service {
 
     /// Cancel the request. Get back the service entry.
-    fn cancel(self) -> Service;
+    fn cancel(self) -> S;
 
     /// Request a service via this channel.
     fn request<RS: RequestStatus<O, S, Self>>(self, mut data: Data) -> RS;
