@@ -225,8 +225,8 @@ pub trait ServerChannel<O, S>: Sized + Channel<O, S>
 pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
         where O: Object<S>, S: Service {
 
-    /// Cancel the request and get read-write rights on data again.
-    fn cancel(self) -> Data;
+    /// Cancel the request. Get back the service entry.
+    fn cancel(self) -> Service;
 }
 
 /// Some data that is transfered via channels.
