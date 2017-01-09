@@ -218,6 +218,11 @@ pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
 pub trait Data {
 }
 
+/// Error that appears after failed attempt to send the data via channel.
+#[derive(Debug)]
+pub enum SendErr {
+}
+
 #[derive(Debug)]
 /// Error that can appear when new service is being registered.
 pub enum RegistrationErr {
