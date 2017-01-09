@@ -258,10 +258,15 @@ pub trait Time {
 /// The decision of the service provider.
 pub enum Decision {
 
-    /// Service provider accepted to provide the requested service.
+    /// Service provider accepted to responde for the requested service.
+    /// However note, that if it accepted the channel, it does not
+    /// guarantee that the proveider will actually provide the service.
+    /// It may just send a detailed denial or fail to provide the service
+    /// for some reason.
     Accept,
 
-    /// Service provider denied to provide the requested service.
+    /// Service provider denied to provide the requested service. The
+    /// channel is broken.
     Deny
 }
 
