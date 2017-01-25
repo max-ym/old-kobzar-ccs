@@ -202,6 +202,9 @@ pub trait Socket<O, S>: Sized
 
     /// Get service that was requested.
     fn service(&self) -> &S;
+    
+    /// Wait forever until some data is received or socket error occurs.
+    fn receive(&self) -> Result<Data, SocketErr>;
 }
 
 /// Some data that is transfered via channels.
@@ -211,6 +214,10 @@ pub trait Data {
 /// The time. Used in timers.
 pub trait Time {
     // TODO
+}
+
+#[derive(Debug)]
+pub enum SocketErr {
 }
 
 #[derive(Debug)]
