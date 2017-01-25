@@ -193,8 +193,8 @@ impl<O, S, SC> RegistrationForm<O, S, SC>
 
 /// Channel is a connection of the requester-object that requests the
 /// service and the provider object. Data transfer is performed by
-/// implementation of this trait.
-pub trait Channel<O, S>: Sized
+/// implementation of the Socket trait for channel.
+pub trait Socket<O, S>: Sized
         where O: Object<S>, S: Service {
 
     /// Get object which requested the service.
