@@ -228,6 +228,10 @@ pub trait Socket<O, S>: Sized
     
     /// Check if channel still is opened.
     fn check(self) -> Option<Self>;
+    
+    /// Check if channel is opened. Similar to 'check', but does
+    /// not consume the socket and returns boolean value instead.
+    fn is_opened(&self) -> bool;
 }
 
 /// Some data that is transfered via channels.
