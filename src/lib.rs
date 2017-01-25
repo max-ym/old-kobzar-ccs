@@ -204,21 +204,22 @@ pub trait Socket<O, S>: Sized
     fn service(&self) -> &S;
     
     /// Wait forever until some data is received or socket error occurs.
-    fn receive(&self) -> Result<&Data, SocketErr>;
+    fn receive<D: Data>(&self) -> Result<D, SocketErr>;
     
     /// Wait for given amount of time to receive a data from the service
     /// provider. Similar to 'receive' function. After timeout, None will
     /// be returned.
-    fn wait_to_receive(&self, time: Time) -> Option<Result<&Data, SocketErr>>;
+    fn wait_to_receive<D: Data, T: Time>(&self, time: T)
+            -> Option<Result<D, SocketErr>>;
     
     /// Wait forever until requester receives the data or socket error
     /// occurs.
-    fn send(&self, data: Data) -> Result<(), SocketErr>;
+    fn send<D: Data>(&self, data: D) -> Result<(), SocketErr>;
     
     /// Wait for given amount of time to send a data to the service requester.
     /// Similar to 'send' function. After timeout, None will
     /// be returned.
-    fn wait_to_send(&self, time: Time) -> Option<Result<(), SocketErr>>;
+    fn wait_to_send<T: Time>(&self, time: T) -> Option<Result<(), SocketErr>>;
     
     /// Close the socket and the channel.
     fn close(self);
