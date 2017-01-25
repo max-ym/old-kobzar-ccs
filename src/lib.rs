@@ -72,9 +72,9 @@ pub trait OpenNetwork<S>: Network<S> where S: Service {
 
     /// Connect to a service provider. If any object in CCS network can
     /// provide such service, then channel is created.
-    fn connect<O, RC>(&self, service: S) -> Result<RC, S>
+    fn connect<O, SC>(&self, service: S) -> Result<SC, S>
         where O     : Object<S>,
-              RC    : RequesterChannel<O, S>;
+              SC    : Socket<O, S>;
 
     /// Attempt to register new service that current object is ready to
     /// provide.
@@ -82,7 +82,7 @@ pub trait OpenNetwork<S>: Network<S> where S: Service {
         -> Result<OS, RegistrationErr>
         where   O   : Object<S>,
                 OS  : OwnedService<Id = S::Id>,
-                SC  : ServerChannel<O, S>;
+                SC  : Socket<O, S>;
 
     /// Try to register service that the object that called this
     /// function is ready to provide. The difference from 'register'
@@ -104,7 +104,7 @@ pub trait OpenNetwork<S>: Network<S> where S: Service {
         -> Result<OS, RegistrationErr>
         where   O   : Object<S>,
                 OS  : OwnedService<Id = S::Id>,
-                SC  : ServerChannel<O, S>;
+                SC  : Socket<O, S>;
 }
 
 /// Service is requested by the Object. Service is used to update some
@@ -147,13 +147,13 @@ pub trait OwnedService: Sized + Service {
     /// that discontinued service could be registered again.
     fn discontinue<O, SC>(self) -> RegistrationForm<O, Self, SC>
         where   O   : Object<Self>,
-                SC  : ServerChannel<O, Self>;
+                SC  : Socket<O, Self>;
 }
 
 pub struct RegistrationForm<O, S, SC>
         where O     : Object<S>,
               S     : Service,
-              SC    : ServerChannel<O, S>
+              SC    : Socket<O, S>
 {
     _a      : std::marker::PhantomData<O>,
 
@@ -168,7 +168,7 @@ pub struct RegistrationForm<O, S, SC>
 impl<O, S, SC> RegistrationForm<O, S, SC>
         where O     : Object<S>,
               S     : Service,
-              SC    : ServerChannel<O, S>
+              SC    : Socket<O, S>
 {
 
     /// Create new registration form.
@@ -204,12 +204,12 @@ pub trait Socket<O, S>: Sized
     fn service(&self) -> &S;
     
     /// Wait forever until some data is received or socket error occurs.
-    fn receive(&self) -> Result<Data, SocketErr>;
+    fn receive(&self) -> Result<&Data, SocketErr>;
     
     /// Wait for given amount of time to receive a data from the service
     /// provider. Similar to 'receive' function. After timeout, None will
     /// be returned.
-    fn wait_to_receive(&self, time: Time) -> Option<Result<Data, SocketErr>>;
+    fn wait_to_receive(&self, time: Time) -> Option<Result<&Data, SocketErr>>;
     
     /// Wait forever until requester receives the data or socket error
     /// occurs.
@@ -225,6 +225,9 @@ pub trait Socket<O, S>: Sized
     
     /// Run some function that can be safely aborted when channel gets closed.
     fn run_abortable(&self, run_fn: Fn()) -> AbortResult;
+    
+    /// Check if channel still is opened.
+    fn check(self) -> Option<Self>;
 }
 
 /// Some data that is transfered via channels.
