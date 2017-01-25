@@ -204,75 +204,13 @@ pub trait Channel<O, S>: Sized
     fn service(&self) -> &S;
 }
 
-/// A channel handle of a server.
-pub trait ServerChannel<O, S>: Sized + Channel<O, S>
-        where O: Object<S>, S: Service {
-
-    /// Disconect from requester and deny providing the service this
-    /// time.
-    fn deny(self);
-
-    /// Peek read-only data that was sent by the requester.
-    fn data(&self) -> &Data;
-
-    /// Accept providing service and receive read-write rights on the
-    /// data chunk from the requester. Requester will not access
-    /// the data chunk no more.
-    fn accept(self); // TODO
-}
-
-/// A channel handle of a requester.
-pub trait RequesterChannel<O, S>: Sized + Channel<O, S>
-        where O: Object<S>, S: Service {
-
-    /// Cancel the request. Get back the service entry.
-    fn cancel(self) -> S;
-
-    /// Request a service via this channel.
-    fn request<RS: RequestStatus<O, S, Self>>(self, mut data: Data) -> RS;
-}
-
 /// Some data that is transfered via channels.
 pub trait Data {
-}
-
-/// A channel that can access service providing status and control
-/// some aspects of service providing process.
-pub trait RequestStatus<O, S, RC>: Sized + Channel<O, S>
-        where O: Object<S>, S: Service, RC: RequesterChannel<O, S> {
-
-    /// Wait for the provider decision (accept or deny). This
-    /// thread will halt.
-    fn wait_decision(&self) -> Decision;
-
-    /// Same as 'wait_decision' except the timer will countdown
-    /// and quit waiting on timeout.
-    fn wait_decision_for(&self, time: Time) -> Option<Decision>;
 }
 
 /// The time. Used in timers.
 pub trait Time {
     // TODO
-}
-
-/// The decision of the service provider.
-pub enum Decision {
-
-    /// Service provider accepted to responde for the requested service.
-    /// However note, that if it accepted the channel, it does not
-    /// guarantee that the proveider will actually provide the service.
-    /// It may just send a detailed denial or fail to provide the service
-    /// for some reason.
-    Accept,
-
-    /// Service provider denied to provide the requested service. The
-    /// channel is broken.
-    Deny
-}
-
-/// Error that appears after failed attempt to send the data via channel.
-#[derive(Debug)]
-pub enum SendErr {
 }
 
 #[derive(Debug)]
