@@ -241,6 +241,7 @@ pub trait Time {
 
 #[derive(Debug)]
 pub enum SocketErr {
+    // TODO
 }
 
 /// Result of running the function that could get aborted if channel closes.
