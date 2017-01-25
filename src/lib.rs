@@ -222,6 +222,9 @@ pub trait Socket<O, S>: Sized
     
     /// Close the socket and the channel.
     fn close(self);
+    
+    /// Run some function that can be safely aborted when channel gets closed.
+    fn run_abortable(&self, run_fn: Fn()) -> AbortResult;
 }
 
 /// Some data that is transfered via channels.
@@ -235,6 +238,17 @@ pub trait Time {
 
 #[derive(Debug)]
 pub enum SocketErr {
+}
+
+/// Result of running the function that could get aborted if channel closes.
+#[derive(Debug)]
+pub enum AbortResult {
+    
+    /// Function was aborted because channel was closed.
+    Aborted,
+    
+    /// Function execution finished and channel was not yet closed.
+    Finished
 }
 
 #[derive(Debug)]
