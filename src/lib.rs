@@ -213,7 +213,7 @@ pub trait Socket<O, S>: Sized
     
     /// Wait forever until requester receives the data or socket error
     /// occurs.
-    fn send(&self, data: Data> -> Result<(), SocketErr>;
+    fn send(&self, data: Data) -> Result<(), SocketErr>;
     
     /// Wait for given amount of time to send a data to the service requester.
     /// Similar to 'send' function. After timeout, None will
