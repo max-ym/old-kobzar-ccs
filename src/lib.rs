@@ -240,7 +240,13 @@ pub trait Data {
 
 /// The time. Used in timers.
 pub trait Time {
-    // TODO
+
+    /// Nanoseconds to wait after all seconds are elapsed
+    /// from 'seconds' function.
+    fn nanos(&self) -> u32;
+    
+    /// Seconds to wait.
+    fn seconds(&self) -> u32;
 }
 
 /// Error that appears in operation with socket.
