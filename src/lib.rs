@@ -219,6 +219,9 @@ pub trait Socket<O, S>: Sized
     /// Similar to 'send' function. After timeout, None will
     /// be returned.
     fn wait_to_send(&self, time: Time) -> Option<Result<(), SocketErr>>;
+    
+    /// Close the socket and the channel.
+    fn close(self);
 }
 
 /// Some data that is transfered via channels.
