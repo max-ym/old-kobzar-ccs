@@ -205,6 +205,10 @@ pub trait Socket<O, S>: Sized
     
     /// Wait forever until some data is received or socket error occurs.
     fn receive(&self) -> Result<Data, SocketErr>;
+    
+    /// Wait forever until requester receives the data or socket error
+    /// occurs.
+    fn send(&self, data: Data> -> Result<(), SocketErr>;
 }
 
 /// Some data that is transfered via channels.
