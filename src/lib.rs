@@ -239,9 +239,19 @@ pub trait Time {
     // TODO
 }
 
+/// Error that appears in operation with socket.
 #[derive(Debug)]
 pub enum SocketErr {
-    // TODO
+    
+    /// Operation cannot be performed because channel is closed.
+    ChannelClosed,
+    
+    /// Operation was canceled because two sockets tried the same operation
+    /// in the same time (like two receives or two sends). This
+    /// error was created so that two objects didn't get into the locked state.
+    /// Error is received only by the last socket which tried to perform
+    /// the operation.
+    Lockup,
 }
 
 /// Result of running the function that could get aborted if channel closes.
