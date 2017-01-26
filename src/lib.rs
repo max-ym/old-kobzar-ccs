@@ -205,6 +205,10 @@ pub trait Socket<O, S>: Sized
     
     /// Wait forever until some data is received or socket error occurs.
     fn receive<D: Data>(&self) -> Result<D, SocketErr>;
+
+    /// Try to receive the data right now. Same as 'receive' but without
+    /// waiting.
+    fn receive_now<D: Data>(&self) -> Result<Option<D>, SocketErr>;
     
     /// Wait for given amount of time to receive a data from the service
     /// provider. Similar to 'receive' function. After timeout, None will
