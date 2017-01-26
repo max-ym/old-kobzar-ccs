@@ -219,6 +219,11 @@ pub trait Socket<O, S>: Sized
     /// Wait forever until requester receives the data or socket error
     /// occurs.
     fn send<D: Data>(&self, data: D) -> Result<(), SocketErr>;
+
+    /// Try to send the data right now. Same as 'send' but without
+    /// waiting. If data was not sent, the consumed data field is
+    /// returned in Result.
+    fn send_now<D: Data>(&self, data: D) -> Result<D, SocketErr>;
     
     /// Wait for given amount of time to send a data to the service requester.
     /// Similar to 'send' function. After timeout, None will
